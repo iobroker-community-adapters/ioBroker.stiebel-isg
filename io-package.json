@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "stiebel-isg",
-    "version": "2.0.2",
+    "version": "2.0.3",
     "news": {
+      "2.0.3": {
+        "en": "Adapter requires admin >= 7.7.22 now\n**Fixed**: update release-script (#143)\n**Fixed**: parse missing \"info_alone\" objects (#140)\n**Fixed**: Cleanup some eslint issues",
+        "de": "Adapter benötigt jetzt admin >= 7.7.22\n**Fixed**: Update-Release-script (#143)\n**Fixed**: fehlende \"info_alone\" Objekte parsen (#140)\n**Fixed**: Aufräumen einiger eslint Probleme",
+        "ru": "Адаптер требует администратора >= 7.7.22\n**Fixed**: Update Release-Script (#143)\n**Fixed**: разбор недостающих объектов «info_alone» (#140)\n** Fixed**: Очистка некоторых проблем с эслинтом",
+        "pt": "Adaptador requer admin >= 7.7.22 agora\n**Fixed**: update release-script (#143)\n**Resolvido**: analisar os objetos \"info_alone\" em falta (# 140)\n**Resolvido**: Limpeza de alguns problemas de eslint",
+        "nl": "Adapter vereist admin < 7.7.22 nu\n**Fixed**: update release-script (#143)\n**Fixed**: ontbrekende \"info_alone\" objecten ontleden (#140)\n**Fixed**: wat eslintproblemen opruimen",
+        "fr": "Adaptateur nécessite admin >= 7.7.22 maintenant\n**Fixed**: mise à jour de la version-script (#143)\n**Fixé**: analyse des objets manquants \"info_alone\" (#140)\n**Fixé**: Nettoyer certains problèmes d'essence",
+        "it": "Adattatore richiede admin >= 7.7.22 ora\n**Fixed**: update release-script (#143)\n**Fixed**: parse mancanti oggetti \"info_alone\" (#140)\n*Fixed**: Pulisci alcuni problemi eslint",
+        "es": "El adaptador requiere admin= 7.7.22 ahora\n**Fixed**: actualización de la versión-script (#143)\n**Fixed**: parse missing \"info_alone\" objects (#140)\n**Fixed**: Limpiar algunos problemas de eslinto",
+        "pl": "Adapter wymaga admin > = 7.7.22\n* *Fixed* *: update release- script (# 143) \n* *Naprawiono* *: brak \"info _ alone\" obiektów (# 140) \n* *Fixed* *: Cleanup some eslint islint issues ",
+        "uk": "Адаптер вимагає адмін >= 7.7.22 тепер\n**Фіксед***: реєстрація релізу (#143)\n**Фіксед**: не вистачає об'єктів \"info_alone\" (#140)\n**Фіксед**: Чистка деяких питань еслінта",
+        "zh-cn": "适任者需要管理员 \\ 7.7.22 现在\n** Fixed**:更新发布标记(# 143)\n** Fixed**:解析缺失的“ info_one”对象(# 140)\n** Fixed**:清理一些eslint问题"
+      },
       "2.0.2": {
         "en": "**Fixed**: Adapter hangup on wrong credentials. (fixes #127)",
         "de": "**Fixed**: Adapter hängt bei falschen Anmeldeinformationen. (fixt #127)",
@@ -80,19 +93,6 @@
         "pl": "zastosowanie js-controller v5",
         "uk": "фіксація для js-controller v5",
         "zh-cn": "fix 控方诉5"
-      },
-      "1.7.5": {
-        "en": "security improvements",
-        "de": "Verbesserung der Sicherheit",
-        "ru": "улучшения безопасности",
-        "pt": "melhorias de segurança",
-        "nl": "beveiliging verbetert",
-        "fr": "amélioration de la sécurité",
-        "it": "miglioramento della sicurezza",
-        "es": "mejoras de seguridad",
-        "pl": "poprawa bezpieczeństwa",
-        "uk": "підвищення безпеки",
-        "zh-cn": "安全改善"
       }
     },
     "titleLang": {

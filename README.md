@@ -52,7 +52,7 @@ If you update this adapter from a previous version instead of a new installation
 	Placeholder for the next version (at the beginning of the line):
 	### **WORK IN PROGRESS**
 -->
-### **WORK IN PROGRESS** - 2026H1 maintenance release
+### 2.0.3 (2026-03-04) - 2026H1 maintenance release
 
 * (copilot) Adapter requires admin >= 7.7.22 now
 * (pdbjjens) **Fixed**: update release-script (#143)
@@ -80,10 +80,6 @@ If you update this adapter from a previous version instead of a new installation
 ### 1.7.7
 
 * security- and compatibility update
-
-### 1.7.6
-
-* fix error with controller v5
 
 ## Legal Notices
 
