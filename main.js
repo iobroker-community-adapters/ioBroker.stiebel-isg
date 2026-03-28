@@ -15,7 +15,7 @@
  */
 
 const utils = require('@iobroker/adapter-core');
-const querystring = require('querystring');
+const querystring = require('node:querystring');
 const cheerio = require('cheerio');
 const tough = require('tough-cookie');
 
