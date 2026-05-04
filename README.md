@@ -79,6 +79,8 @@ If you update this adapter from a previous version instead of a new installation
 
 * security- and compatibility update
 
+[Older changelogs can be found there](CHANGELOG_OLD.md)
+
 ## Legal Notices
 
 STIEBEL ELTRON, TECALOR, ISG and associated logos are trademarks or registered trademarks of STIEBEL ELTRON GmbH & Co KG  [https://www.stiebel-eltron.com](https://www.stiebel-eltron.com)
