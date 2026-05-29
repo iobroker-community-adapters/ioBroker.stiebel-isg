@@ -29,6 +29,7 @@ const fetchCookieModule = (() => {
 
 let undiciDispatcher = null;
 try {
+    //repochecker: optional dependency 'undici'
     const undici = require('undici');
     if (typeof undici.Agent === 'function') {
         undiciDispatcher = new undici.Agent({ keepAliveTimeout: 60000, connections: 6 });
