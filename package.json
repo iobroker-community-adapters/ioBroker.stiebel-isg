@@ -23,7 +23,7 @@
     "node": ">= 22"
   },
   "dependencies": {
-    "@iobroker/adapter-core": "^3.3.2",
+    "@iobroker/adapter-core": "^3.4.1",
     "cheerio": "^1.2.0",
     "fetch-cookie": "^3.2.0",
     "tough-cookie": "^6.0.1"
