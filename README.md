@@ -48,7 +48,9 @@ If you update this adapter from a previous version instead of a new installation
 	### **WORK IN PROGRESS**
 -->
 ### **WORK IN PROGRESS**
-- (copilot) Adapter requires node.js >= 22 now
+
+* (copilot) Adapter requires node.js >= 22 now
+* (pdbjjens) i18n directory migrated to short format
 
 ### 2.0.3 (2026-03-04) - 2026H1 maintenance release
 
