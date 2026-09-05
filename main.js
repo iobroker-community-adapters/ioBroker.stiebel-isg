@@ -1449,14 +1449,14 @@ function startAdapter(options) {
                 } else if (obj) {
                     if (!obj.common.language) {
                         adapter.log.info('Language not set. English set therefore.');
-                        nameTranslation = require('./admin/i18n/en/translations.json');
+                        nameTranslation = require('./admin/i18n/en.json');
                     } else {
                         systemLanguage = obj.common.language;
                         try {
-                            nameTranslation = require(`./admin/i18n/${systemLanguage}/translations.json`);
+                            nameTranslation = require(`./admin/i18n/${systemLanguage}.json`);
                         } catch {
                             adapter.log.warn(`Translations for ${systemLanguage} not found, falling back to English.`);
-                            nameTranslation = require('./admin/i18n/en/translations.json');
+                            nameTranslation = require('./admin/i18n/en.json');
                         }
                     }
 
