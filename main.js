@@ -178,7 +178,7 @@ function buildFetchOptions(url, extra = {}) {
     const controller = new AbortController();
     let timer = null;
     if (timeout > 0) {
-        timer = setTimeout(() => {
+        timer = adapter.setTimeout(() => {
             try {
                 controller.abort();
             } catch {
@@ -205,7 +205,7 @@ function buildFetchOptions(url, extra = {}) {
         options: opts,
         clearTimeout: () => {
             if (timer) {
-                clearTimeout(timer);
+                adapter.clearTimeout(timer);
                 timer = null;
             }
         },
@@ -1239,8 +1239,8 @@ function setIsgCommands(strKey, strValue) {
         data: JSON.stringify(commands),
     });
 
-    clearTimeout(CommandTimeout);
-    CommandTimeout = setTimeout(async function () {
+    adapter.clearTimeout(CommandTimeout);
+    CommandTimeout = adapter.setTimeout(async function () {
         const fetch = getFetch();
         const built = buildFetchOptions(`${host}/save.php`, {
             method: 'POST',
@@ -1386,13 +1386,13 @@ async function main() {
     });
 
     if (isgIntervall) {
-        clearInterval(isgIntervall);
+        adapter.clearInterval(isgIntervall);
     }
     if (isgCommandIntervall) {
-        clearInterval(isgCommandIntervall);
+        adapter.clearInterval(isgCommandIntervall);
     }
 
-    isgIntervall = setInterval(
+    isgIntervall = adapter.setInterval(
         function () {
             valuePaths.forEach(function (item) {
                 schedule(() => getIsgValues(item));
@@ -1404,7 +1404,7 @@ async function main() {
         Math.max(1, Number(adapter.config.isgIntervall) || 60) * 1000,
     );
 
-    isgCommandIntervall = setInterval(
+    isgCommandIntervall = adapter.setInterval(
         function () {
             commandPaths.forEach(function (item) {
                 schedule(() => getIsgCommands(item));
@@ -1431,7 +1431,7 @@ function startAdapter(options) {
             if (command == 'ISGReboot') {
                 adapter.log.info('ISG rebooting');
                 rebootISG();
-                setTimeout(main, 60000);
+                adapter.setTimeout(main, 60000);
                 return;
             }
 
@@ -1492,13 +1492,13 @@ function startAdapter(options) {
         unload: function (callback) {
             try {
                 if (isgIntervall) {
-                    clearInterval(isgIntervall);
+                    adapter.clearInterval(isgIntervall);
                 }
                 if (isgCommandIntervall) {
-                    clearInterval(isgCommandIntervall);
+                    adapter.clearInterval(isgCommandIntervall);
                 }
                 if (CommandTimeout) {
-                    clearTimeout(CommandTimeout);
+                    adapter.clearTimeout(CommandTimeout);
                 }
                 adapter.log.info('cleaned everything up...');
                 callback();
