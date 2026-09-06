@@ -10,8 +10,7 @@
  *
  * Requirements:
  *  - Node >= 18 (global fetch + AbortController)
- *  - npm i --save fetch-cookie tough-cookie cheerio
- *  - optionally: npm i --save undici
+ *  - npm i --save fetch-cookie tough-cookie cheerio undici
  */
 
 const utils = require('@iobroker/adapter-core');
@@ -29,7 +28,6 @@ const fetchCookieModule = (() => {
 
 let undiciDispatcher = null;
 try {
-    // @repochecker: optional dependency 'undici'
     const undici = require('undici');
     if (typeof undici.Agent === 'function') {
         undiciDispatcher = new undici.Agent({ keepAliveTimeout: 60000, connections: 6 });
@@ -178,7 +176,7 @@ function buildFetchOptions(url, extra = {}) {
     const controller = new AbortController();
     let timer = null;
     if (timeout > 0) {
-        timer = setTimeout(() => {
+        timer = adapter.setTimeout(() => {
             try {
                 controller.abort();
             } catch {
@@ -190,8 +188,6 @@ function buildFetchOptions(url, extra = {}) {
     const opts = Object.assign(
         {
             signal: controller.signal,
-            // eslint-disable-next-line jsdoc/check-tag-names
-            credentials: /** @type {RequestCredentials} */ ('include'),
         },
         extra,
     );
@@ -205,7 +201,7 @@ function buildFetchOptions(url, extra = {}) {
         options: opts,
         clearTimeout: () => {
             if (timer) {
-                clearTimeout(timer);
+                adapter.clearTimeout(timer);
                 timer = null;
             }
         },
@@ -1239,8 +1235,8 @@ function setIsgCommands(strKey, strValue) {
         data: JSON.stringify(commands),
     });
 
-    clearTimeout(CommandTimeout);
-    CommandTimeout = setTimeout(async function () {
+    adapter.clearTimeout(CommandTimeout);
+    CommandTimeout = adapter.setTimeout(async function () {
         const fetch = getFetch();
         const built = buildFetchOptions(`${host}/save.php`, {
             method: 'POST',
@@ -1386,13 +1382,13 @@ async function main() {
     });
 
     if (isgIntervall) {
-        clearInterval(isgIntervall);
+        adapter.clearInterval(isgIntervall);
     }
     if (isgCommandIntervall) {
-        clearInterval(isgCommandIntervall);
+        adapter.clearInterval(isgCommandIntervall);
     }
 
-    isgIntervall = setInterval(
+    isgIntervall = adapter.setInterval(
         function () {
             valuePaths.forEach(function (item) {
                 schedule(() => getIsgValues(item));
@@ -1404,7 +1400,7 @@ async function main() {
         Math.max(1, Number(adapter.config.isgIntervall) || 60) * 1000,
     );
 
-    isgCommandIntervall = setInterval(
+    isgCommandIntervall = adapter.setInterval(
         function () {
             commandPaths.forEach(function (item) {
                 schedule(() => getIsgCommands(item));
@@ -1431,7 +1427,7 @@ function startAdapter(options) {
             if (command == 'ISGReboot') {
                 adapter.log.info('ISG rebooting');
                 rebootISG();
-                setTimeout(main, 60000);
+                adapter.setTimeout(main, 60000);
                 return;
             }
 
@@ -1449,14 +1445,14 @@ function startAdapter(options) {
                 } else if (obj) {
                     if (!obj.common.language) {
                         adapter.log.info('Language not set. English set therefore.');
-                        nameTranslation = require('./admin/i18n/en/translations.json');
+                        nameTranslation = require('./admin/i18n/en.json');
                     } else {
                         systemLanguage = obj.common.language;
                         try {
-                            nameTranslation = require(`./admin/i18n/${systemLanguage}/translations.json`);
+                            nameTranslation = require(`./admin/i18n/${systemLanguage}.json`);
                         } catch {
                             adapter.log.warn(`Translations for ${systemLanguage} not found, falling back to English.`);
-                            nameTranslation = require('./admin/i18n/en/translations.json');
+                            nameTranslation = require('./admin/i18n/en.json');
                         }
                     }
 
@@ -1492,13 +1488,13 @@ function startAdapter(options) {
         unload: function (callback) {
             try {
                 if (isgIntervall) {
-                    clearInterval(isgIntervall);
+                    adapter.clearInterval(isgIntervall);
                 }
                 if (isgCommandIntervall) {
-                    clearInterval(isgCommandIntervall);
+                    adapter.clearInterval(isgCommandIntervall);
                 }
                 if (CommandTimeout) {
-                    clearTimeout(CommandTimeout);
+                    adapter.clearTimeout(CommandTimeout);
                 }
                 adapter.log.info('cleaned everything up...');
                 callback();
