@@ -188,8 +188,6 @@ function buildFetchOptions(url, extra = {}) {
     const opts = Object.assign(
         {
             signal: controller.signal,
-            // eslint-disable-next-line jsdoc/check-tag-names
-            credentials: /** @type {RequestCredentials} */ ('include'),
         },
         extra,
     );
