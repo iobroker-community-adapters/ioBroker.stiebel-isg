@@ -10,8 +10,7 @@
  *
  * Requirements:
  *  - Node >= 18 (global fetch + AbortController)
- *  - npm i --save fetch-cookie tough-cookie cheerio
- *  - optionally: npm i --save undici
+ *  - npm i --save fetch-cookie tough-cookie cheerio undici
  */
 
 const utils = require('@iobroker/adapter-core');
@@ -29,7 +28,6 @@ const fetchCookieModule = (() => {
 
 let undiciDispatcher = null;
 try {
-    // @repochecker: optional dependency 'undici'
     const undici = require('undici');
     if (typeof undici.Agent === 'function') {
         undiciDispatcher = new undici.Agent({ keepAliveTimeout: 60000, connections: 6 });
