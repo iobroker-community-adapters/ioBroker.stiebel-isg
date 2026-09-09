@@ -23,7 +23,7 @@ This adapter reads values from STIEBEL ELTRON/Tecalor Internet Service Gateways 
 
 ## Release Notes
 
-**Caution:** Version 2.0.x includes some Breaking Changes:
+**Caution:** Version 2.x.x includes some Breaking Changes:
 
 * node.js >= 22, js-controller >= 6.0.11 and admin >= 7.7.22 is required  
 Upgrade your ioBroker to at least this software level, if you want to use this adapter
