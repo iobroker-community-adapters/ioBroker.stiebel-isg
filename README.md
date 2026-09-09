@@ -47,7 +47,7 @@ If you update this adapter from a previous version instead of a new installation
 	Placeholder for the next version (at the beginning of the line):
 	### **WORK IN PROGRESS**
 -->
-### **WORK IN PROGRESS**
+### 2.1.0 (2026-09-09)
 
 * (copilot) **Breaking**: Adapter requires node.js >= 22 now
 * (pdbjjens) **Fixed**: i18n directory migrated to short format
@@ -78,10 +78,6 @@ If you update this adapter from a previous version instead of a new installation
 * (pdbjjens) Change: migrate adapter configuration to jsonConfig
 * (pdbjjens) Change: migrate from deprecated "request" http client to native fetch API
 * (pdbjjens) Fix: min/max handling
-
-### 1.7.7
-
-* security- and compatibility update
 
 [Older changelogs can be found there](CHANGELOG_OLD.md)
 

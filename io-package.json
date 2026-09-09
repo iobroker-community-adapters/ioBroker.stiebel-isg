@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "stiebel-isg",
-    "version": "2.0.3",
+    "version": "2.1.0",
     "news": {
+      "2.1.0": {
+        "en": "**Breaking**: Adapter requires node.js >= 22 now\n**Fixed**: i18n directory migrated to short format\n**Fixed**: dependency updates and minor bug fixes\n**Fixed**: startup logic and misleading error messages (#168)",
+        "de": "**Breaking**: Adapter benötigt jetzt node.js >= 22\n**Behoben**: Verzeichnis i18n ins Kurzformat migriert\n**Behoben**: Updates und kleinere Bugfixes\n**Behoben**: Startlogik und irreführende Fehlermeldungen (#168)",
+        "ru": "**Неисправно**: теперь для адаптера требуется файл node.js >= 22\n**Исправлено**: каталог i18n перенесен в короткий формат\n**Исправлено**: обновления зависимостей и незначительные исправления ошибок\n**Исправлено**: логика запуска и вводящие в заблуждение сообщения об ошибках (#168)",
+        "pt": "**Quebra**: O adaptador exige node.js >= 2 agora\n**Fixo**: pasta i18n migrada para formato curto\n**Corrigido**: dependências e pequenos bugs\n**Corrigido**: lógica inicial e erros enganosos (#168)",
+        "nl": "**Breekend**: Voor de adapter is nu node.js >= 22 vereist\n**Opgelost**: de i18n-directory is gemigreerd naar een kort formaat\n**Opgelost**: afhankelijkheidsupdates en kleine bugfixes\n**Opgelost**: opstartlogica en misleidende foutmeldingen (#168)",
+        "fr": "**Breaking** : l'adaptateur nécessite node.js >= 22\n**Corrigé** : le répertoire i18n a été migré au format court\n**Corrigé** : mises à jour des dépendances et bugs mineurs\n**Corrigé** : logique de démarrage et messages d'erreur trompeurs (#168)",
+        "it": "**Rottura**: l'adattatore richiede node.js =2\n**Fisso**: cartella i18n migrata in formato breve\n**Fisso**: dipendenze e bug corretti\n**Fisso**: logica di avvio e errori ingannevoli (#168)",
+        "es": "**Rompiendo**: el adaptador requiere node.js >= 22 ahora\n**Fijo**: el directorio i18n migró a formato corto\n**Fijo**: actualizaciones de dependencias y errores menores\n**Fijo**: lógica de inicio y mensajes de error engañosos (#168)",
+        "pl": "**Złamanie**: Adapter wymaga teraz node.js >= 22\n**Naprawione**: katalog i18n został przeniesiony do krótkiego formatu\n**Naprawione**: aktualizacje zależności i drobne poprawki błędów\n**Naprawione**: logika uruchamiania i mylące komunikaty o błędach (#168)",
+        "uk": "**Поломка**: Адаптер вимагає node.js >= 22 зараз\n** Виправлено**: каталог i18n перенесений у короткий формат\n** Виправлено**: оновлення залежностей та незначні виправлення помилок\n**Виправлено**: логіка запуску та оманливі повідомлення про помилки (#168)",
+        "zh-cn": "**中断**：适配器现在需要 node.js >= 22\n**已修复**：i18n 目录迁移到短格式\n**已修复**：依赖项更新和小错误修复\n**已修复**：启动逻辑和误导性错误消息 (#168)"
+      },
       "2.0.3": {
         "en": "Adapter requires admin >= 7.7.22 now\n**Fixed**: update release-script (#143)\n**Fixed**: parse missing \"info_alone\" objects (#140)\n**Fixed**: Cleanup some eslint issues",
         "de": "Adapter benötigt jetzt admin >= 7.7.22\n**Fixed**: Update-Release-script (#143)\n**Fixed**: fehlende \"info_alone\" Objekte parsen (#140)\n**Fixed**: Aufräumen einiger eslint Probleme",
@@ -80,19 +93,6 @@
         "pl": "rozszerzenia kodu dla js-controller v5",
         "uk": "javascript licenses api веб-сайт go1.13.8",
         "zh-cn": "b. 加强对控制的容忍 v 5"
-      },
-      "1.7.6": {
-        "en": "fix for js-controller v5",
-        "de": "Anpassungen für js-controller v5",
-        "ru": "фикс для js-controller v5",
-        "pt": "correção para js-controller v5",
-        "nl": "vertaling:",
-        "fr": "fixation pour js-controller v5",
-        "it": "correzione per js-controller v5",
-        "es": "fijado para js-controller v5",
-        "pl": "zastosowanie js-controller v5",
-        "uk": "фіксація для js-controller v5",
-        "zh-cn": "fix 控方诉5"
       }
     },
     "titleLang": {

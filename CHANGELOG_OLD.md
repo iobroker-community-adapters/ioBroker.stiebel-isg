@@ -1,4 +1,9 @@
 # Older changes
+## 1.7.7
+
+* security- and compatibility update
+
+
 ## 1.7.6
 
 * fix error with controller v5
