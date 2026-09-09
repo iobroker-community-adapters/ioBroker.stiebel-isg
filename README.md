@@ -52,6 +52,7 @@ If you update this adapter from a previous version instead of a new installation
 * (copilot) **Breaking**: Adapter requires node.js >= 22 now
 * (pdbjjens) **Fixed**: i18n directory migrated to short format
 * (pdbjjens) **Fixed**: dependency updates and minor bug fixes
+* (pdbjjens) **Fixed**: startup logic and misleading error messages (#168)
 
 ### 2.0.3 (2026-03-04) - 2026H1 maintenance release
 
