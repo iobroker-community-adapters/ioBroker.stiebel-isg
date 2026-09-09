@@ -401,7 +401,7 @@ async function getHTML(sidePath) {
             );
         } else {
             adapter.log.error(
-                `Error: ${typeof error === 'object' && error !== null && 'message' in error ? error.message : String(error)} to ${strURL} - Check ISG Address!`,
+                `Error: ${typeof error === 'object' && error !== null && 'message' in error ? error.message : String(error)} to ${strURL} - Check ISG connection!`,
             );
         }
         adapter.setState('info.connection', false, true);
@@ -1300,6 +1300,46 @@ function rebootISG() {
         });
 }
 
+function validateConfig() {
+    const config = adapter.config;
+    const address = typeof config.isgAddress === 'string' ? config.isgAddress.trim() : '';
+    const ipformat =
+        /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+    const fqdnformat = /^(?!:\/\/)(?=.{1,255}$)((.{1,63}\.){1,127}(?![0-9]*$)[a-z0-9-]+\.?)$/;
+
+    if (!address) {
+        adapter.log.error('Invalid configuration - isgAddress not set.');
+        return false;
+    }
+    if (!ipformat.test(address) && !fqdnformat.test(address)) {
+        adapter.log.error(
+            `ISG Address ${address} format not valid. Should be e.g. 192.168.123.123 or servicewelt.fritz.box`,
+        );
+        return false;
+    }
+    for (const intervalName of ['isgIntervall', 'isgCommandIntervall']) {
+        const interval = Number(config[intervalName]);
+        if (!Number.isFinite(interval) || interval < 1) {
+            adapter.log.error(`Invalid configuration - ${intervalName} must be at least 1 second.`);
+            return false;
+        }
+    }
+
+    if (config.maxConcurrentFetches != null) {
+        const maxFetches = Number(config.maxConcurrentFetches);
+        if (!Number.isFinite(maxFetches) || maxFetches < 1) {
+            adapter.log.error('Invalid configuration - maxConcurrentFetches must be at least 1.');
+            return false;
+        }
+    }
+    if (config.isgUmlauts !== 'yes' && config.isgUmlauts !== 'no') {
+        adapter.log.error('Invalid configuration - isgUmlauts must be either "yes" or "no".');
+        return false;
+    }
+
+    return true;
+}
+
 async function main() {
     adapter.setObjectNotExists(
         'ISGReboot',
@@ -1317,26 +1357,6 @@ async function main() {
         () => adapter.subscribeStates('ISGReboot'),
     );
 
-    const ipformat =
-        /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
-    /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
-    const fqdnformat = /^(?!:\/\/)(?=.{1,255}$)((.{1,63}\.){1,127}(?![0-9]*$)[a-z0-9-]+\.?)$/;
-
-    if (!adapter.config.isgAddress || adapter.config.isgAddress.trim() === '') {
-        adapter.log.error('Invalid configuration - isgAddress not set.');
-        adapter.setState('info.connection', false, true);
-        return;
-    } else if (!adapter.config.isgAddress.match(ipformat) && !adapter.config.isgAddress.match(fqdnformat)) {
-        adapter.log.error(
-            `ISG Address ${adapter.config.isgAddress} format not valid. Should be e.g. 192.168.123.123 or servicewelt.fritz.box`,
-        );
-        return;
-    }
-
-    host = adapter.config.isgAddress.trim();
-    if (!/^\s*https?:\/\//i.test(host)) {
-        host = `http://${host}`;
-    }
     adapter.log.info(`Connecting to ISG: ${host} ...`);
 
     // remove trailing slashes
@@ -1363,9 +1383,9 @@ async function main() {
             adapter.log.info('Connected to ISG successfully.');
             adapter.setState('info.connection', true, true);
         }
-    } catch (e) {
-        const errorMessage = e instanceof Error ? e.message : String(e);
-        adapter.log.error(`checkIsgCredentials error: ${errorMessage}`);
+    } catch {
+        // getHTML already logs the connection/request error.
+        return;
     }
 
     // schedule initial fetches with concurrency control
@@ -1414,107 +1434,118 @@ async function main() {
    Adapter lifecycle
    ------------------------- */
 
-function startAdapter(options) {
-    options = options || {};
-    Object.assign(options, {
-        name: 'stiebel-isg',
-        stateChange: function (id, state) {
-            const command = id.split('.').pop();
-            if (!state || state.ack) {
+class StiebelIsg extends utils.Adapter {
+    constructor(options) {
+        super({
+            ...options,
+            name: 'stiebel-isg',
+        });
+        // The existing adapter functions use the shared adapter reference.
+        // eslint-disable-next-line @typescript-eslint/no-this-alias
+        adapter = this;
+        this.on('stateChange', this.onStateChange.bind(this));
+        this.on('ready', this.onReady.bind(this));
+        this.on('unload', this.onUnload.bind(this));
+    }
+
+    onStateChange(id, state) {
+        const command = id.split('.').pop();
+        if (!state || state.ack) {
+            return;
+        }
+
+        if (command == 'ISGReboot') {
+            adapter.log.info('ISG rebooting');
+            rebootISG();
+            adapter.setTimeout(main, 60000);
+            return;
+        }
+
+        setIsgCommands(command, state.val);
+    }
+
+    onReady() {
+        adapter.setState('info.connection', false, true);
+        if (!validateConfig()) {
+            return;
+        }
+        const address = adapter.config.isgAddress.trim();
+        host = /^https?:\/\//i.test(address) ? address : `http://${address}`;
+
+        adapter.getForeignObject('system.config', function (err, obj) {
+            if (err) {
+                adapter.log.error(err);
+                if (obj) {
+                    adapter.log.error(`statusCode: ${obj.statusCode}`);
+                    adapter.log.error(`statusText: ${obj.statusText}`);
+                }
                 return;
-            }
-
-            if (command == 'ISGReboot') {
-                adapter.log.info('ISG rebooting');
-                rebootISG();
-                adapter.setTimeout(main, 60000);
-                return;
-            }
-
-            setIsgCommands(command, state.val);
-        },
-        ready: function () {
-            adapter.getForeignObject('system.config', function (err, obj) {
-                if (err) {
-                    adapter.log.error(err);
-                    if (obj) {
-                        adapter.log.error(`statusCode: ${obj.statusCode}`);
-                        adapter.log.error(`statusText: ${obj.statusText}`);
-                    }
-                    return;
-                } else if (obj) {
-                    if (!obj.common.language) {
-                        adapter.log.info('Language not set. English set therefore.');
-                        nameTranslation = require('./admin/i18n/en.json');
-                    } else {
-                        systemLanguage = obj.common.language;
-                        try {
-                            nameTranslation = require(`./admin/i18n/${systemLanguage}.json`);
-                        } catch {
-                            adapter.log.warn(`Translations for ${systemLanguage} not found, falling back to English.`);
-                            nameTranslation = require('./admin/i18n/en.json');
-                        }
-                    }
-
-                    // set cookie jar
-                    setJar(new tough.CookieJar());
-                    // Reset the connection indicator during startup
-                    adapter.setState('info.connection', false, true);
-
-                    // read concurrency configuration (default 3)
+            } else if (obj) {
+                if (!obj.common.language) {
+                    adapter.log.info('Language not set. English set therefore.');
+                    nameTranslation = require('./admin/i18n/en.json');
+                } else {
+                    systemLanguage = obj.common.language;
                     try {
-                        const cfgVal = Number(adapter.config.maxConcurrentFetches);
-                        if (!isNaN(cfgVal) && cfgVal > 0) {
-                            maxConcurrentFetches = cfgVal;
-                        } else {
-                            maxConcurrentFetches = 3;
-                        }
+                        nameTranslation = require(`./admin/i18n/${systemLanguage}.json`);
                     } catch {
+                        adapter.log.warn(`Translations for ${systemLanguage} not found, falling back to English.`);
+                        nameTranslation = require('./admin/i18n/en.json');
+                    }
+                }
+
+                // set cookie jar
+                setJar(new tough.CookieJar());
+                // read concurrency configuration (default 3)
+                try {
+                    const cfgVal = Number(adapter.config.maxConcurrentFetches);
+                    if (!isNaN(cfgVal) && cfgVal > 0) {
+                        maxConcurrentFetches = cfgVal;
+                    } else {
                         maxConcurrentFetches = 3;
                     }
-
-                    main();
+                } catch {
+                    maxConcurrentFetches = 3;
                 }
-            });
 
-            commandPaths = (adapter.config.isgCommandPaths || '').split(';').filter(Boolean);
-            valuePaths = (adapter.config.isgValuePaths || '').split(';').filter(Boolean);
-            statusPaths = (adapter.config.isgStatusPaths || '').split(';').filter(Boolean);
-
-            if (adapter.config.isgExpert === true && adapter.config.isgExpertPaths) {
-                commandPaths = commandPaths.concat(adapter.config.isgExpertPaths.split(';').filter(Boolean));
+                main();
             }
-        },
-        unload: function (callback) {
-            try {
-                if (isgIntervall) {
-                    adapter.clearInterval(isgIntervall);
-                }
-                if (isgCommandIntervall) {
-                    adapter.clearInterval(isgCommandIntervall);
-                }
-                if (CommandTimeout) {
-                    adapter.clearTimeout(CommandTimeout);
-                }
-                adapter.log.info('cleaned everything up...');
-                callback();
-            } catch {
-                callback();
-            }
-        },
-    });
+        });
 
-    adapter = new utils.Adapter(options);
-    return adapter;
+        commandPaths = (adapter.config.isgCommandPaths || '').split(';').filter(Boolean);
+        valuePaths = (adapter.config.isgValuePaths || '').split(';').filter(Boolean);
+        statusPaths = (adapter.config.isgStatusPaths || '').split(';').filter(Boolean);
+
+        if (adapter.config.isgExpert === true && adapter.config.isgExpertPaths) {
+            commandPaths = commandPaths.concat(adapter.config.isgExpertPaths.split(';').filter(Boolean));
+        }
+    }
+
+    onUnload(callback) {
+        try {
+            if (isgIntervall) {
+                adapter.clearInterval(isgIntervall);
+            }
+            if (isgCommandIntervall) {
+                adapter.clearInterval(isgCommandIntervall);
+            }
+            if (CommandTimeout) {
+                adapter.clearTimeout(CommandTimeout);
+            }
+            adapter.log.info('cleaned everything up...');
+            callback();
+        } catch {
+            callback();
+        }
+    }
 }
 
 /* -------------------------
    Export / start
    ------------------------- */
 
-// @ts-expect-error: module is defined in adapter-core
-if (module && module.parent) {
-    module.exports = startAdapter;
+if (require.main !== module) {
+    module.exports = options => new StiebelIsg(options);
 } else {
-    startAdapter();
+    new StiebelIsg();
 }
