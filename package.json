@@ -27,7 +27,7 @@
     "cheerio": "^1.2.0",
     "fetch-cookie": "^3.2.0",
     "tough-cookie": "^6.0.2",
-    "undici": "^7.29.0"
+    "undici": "^8.10.2"
   },
   "devDependencies": {
     "@alcalzone/release-script": "^5.2.1",
