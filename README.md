@@ -39,7 +39,7 @@ If you update this adapter from a previous version instead of a new installation
 
 1. Configure the instance by entering the IP-address or domain name of the ISG and if configured in the ISG, the user name and password.  
 2. The other settings and the the list of the web pages of the ISG on tab URLs may be left at their default values.
-3. You can improve performance and reduce the load on the ISG if you remove any paths from the URLs tab which do not exist in you ISG Web GUI or which you are not interested in. You can easily identify the URLs by opening the ISG SERVICEWELT Web page and open the various navigation tabs one by one. The URL of the respective page is shown in your browser e.g <http://IP-of-your-ISG/?s=1,0> is the value path to INFO/ANLAGE.
+3. You can improve performance and reduce the load on the ISG if you remove any paths from the URLs tab which do not exist in your ISG Web GUI or which you are not interested in. You can easily identify the URLs by opening the ISG SERVICEWELT Web page and open the various navigation tabs one by one. The URL of the respective page is shown in your browser e.g <http://IP-of-your-ISG/?s=1,0> is the value path to INFO/ANLAGE.
 
 ## Changelog
 
