@@ -47,7 +47,7 @@ If you update this adapter from a previous version instead of a new installation
 	Placeholder for the next version (at the beginning of the line):
 	### **WORK IN PROGRESS**
 -->
-### **WORK IN PROGRESS** - 2026H2 bugfix release
+### 2.2.0 (2026-10-06) - 2026H2 bugfix release
 
 * (pdbjjens) **Breaking**: Adapter requires node.js >= 22.19.0 and undici >= 8.10.2 now
 * (pdbjjens) **Fixed**: Sporadic "fetch failed ... Check ISG connection!" (#221)
@@ -74,16 +74,6 @@ If you update this adapter from a previous version instead of a new installation
 ### 2.0.1 (2025-11-12)
 
 * (pdbjjens) **Fixed**: ioBroker warnings are avoided by clamping any values exceeding min/max to the min value before setting. (fixes #53 & #65)
-
-### 2.0.0 (2025-10-27)
-
-* (mcm1957) Change: Adapter has been migrated to iobroker-community-adapters organisation
-* (mcm1957) Change: Adapter requires node.js >= 20, js-controller >= 6.0.11 and admin >= 7.6.17 now
-* (mcm1957) Fix: Dependencies have been updated
-* (pdbjjens) Change: remove .npmignore
-* (pdbjjens) Change: migrate adapter configuration to jsonConfig
-* (pdbjjens) Change: migrate from deprecated "request" http client to native fetch API
-* (pdbjjens) Fix: min/max handling
 
 [Older changelogs can be found there](CHANGELOG_OLD.md)
 

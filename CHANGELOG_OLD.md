@@ -1,8 +1,18 @@
 # Older changes
+## 2.0.0 (2025-10-27)
+
+* (mcm1957) Change: Adapter has been migrated to iobroker-community-adapters organisation
+* (mcm1957) Change: Adapter requires node.js >= 20, js-controller >= 6.0.11 and admin >= 7.6.17 now
+* (mcm1957) Fix: Dependencies have been updated
+* (pdbjjens) Change: remove .npmignore
+* (pdbjjens) Change: migrate adapter configuration to jsonConfig
+* (pdbjjens) Change: migrate from deprecated "request" http client to native fetch API
+* (pdbjjens) Fix: min/max handling
+
+
 ## 1.7.7
 
 * security- and compatibility update
-
 
 ## 1.7.6
 
