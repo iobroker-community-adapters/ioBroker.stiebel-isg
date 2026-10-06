@@ -22,7 +22,7 @@
     "isg password": "Passwort",
     "isg password_help": "Passwort für die ISG",
     "isg password_tips": "Beim Passwort muss die Groß-/Kleinschreibung beachtet werden. Lassen Sie es leer, wenn es nicht in ISG festgelegt ist",
-    "no": "NEIN",
+    "no": "Nein",
     "settings": "Einstellungen",
     "start": "Start",
     "status paths": "Statuspfade",
