@@ -143,12 +143,26 @@ function getFetchFactory() {
  * an unreachable/compromised upstream from silently pushing error pages or
  * unexpected payloads straight into state processing.
  */
+/*
+ * Wrap a fetch implementation so that responses from the external service
+ * are validated (HTTP status) before the body is handed off to cheerio
+ * parsing and, ultimately, to ioBroker object/state updates. This prevents
+ * an unreachable/compromised upstream from silently pushing error pages or
+ * unexpected payloads straight into state processing.
+ */
 function wrapFetchWithValidation(fetchFn) {
     return async (...args) => {
         const res = await fetchFn(...args);
-        if (!res || typeof res.ok !== 'boolean' || !res.ok) {
-            const status = res && res.status;
-            throw new Error(`Unexpected response (status ${status}) received from external service`);
+        // Validate that we got a proper Response-like object
+        if (!res || typeof res !== 'object') {
+            throw new Error('Invalid response received from external service: response is null or not an object');
+        }
+        // Check for ok property and validate HTTP status
+        if (typeof res.ok !== 'boolean' || !res.ok) {
+            const status = typeof res.status === 'number' ? res.status : 'unknown';
+            const statusText = typeof res.statusText === 'string' ? res.statusText : '';
+            const details = statusText ? ` (${statusText})` : '';
+            throw new Error(`Unexpected response (status ${status}${details}) received from external service`);
         }
         return res;
     };
